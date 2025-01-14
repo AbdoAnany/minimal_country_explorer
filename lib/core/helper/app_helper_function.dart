@@ -3,8 +3,8 @@ import 'package:intl/intl.dart' as intl;
 class AppFunction {
 
 
-  static String formatNumber(input) {
+  static String formatNumber(int? input) {
     var formatter = intl.NumberFormat('##,000');
-    return formatter.format(input);
+    return formatter.format(input??0);
   }
 }

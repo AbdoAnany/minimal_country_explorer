@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimal_country_explorer/presentation/screens/country_list_screen.dart';
 import 'package:minimal_country_explorer/presentation/screens/favorites_screen.dart';
 
+import 'core/const/app_color.dart';
+
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -16,9 +18,9 @@ class MyApp extends StatelessWidget {
       title: 'Minimal Country Explorer',
       theme: ThemeData(primarySwatch: Colors.blue,
 
-      scaffoldBackgroundColor:  Color(0xFFf5f5f5),
+      scaffoldBackgroundColor: AppColor.colorBg,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFf5f5f5),
+          backgroundColor: AppColor.colorBg,
         )
       ),
       home: const CountryListScreen(),

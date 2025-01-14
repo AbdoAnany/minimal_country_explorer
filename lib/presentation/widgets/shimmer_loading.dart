@@ -14,7 +14,7 @@ class ShimmerLoading extends StatelessWidget {
   enabled: true,
       child: ListView.builder(
         itemCount: 10,
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         itemBuilder: (context, index) => CountryCard(country: CountryModel(
           name: Name(
             common: 'Egypt',
