@@ -1,7 +1,5 @@
-// lib/presentation/widgets/country_card.dart
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-
+import 'package:minimal_country_explorer/core/helper/app_helper_function.dart';
 import '../../data/models/country_model.dart';
 import '../screens/country_detail_screen.dart';
 
@@ -53,18 +51,31 @@ class CountryCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.group, size: 16),
                   const SizedBox(width: 4),
-                  Text('${country.population}'),
+                  Text(AppFunction.formatNumber(country.population)),
                 ],
               ),     Tooltip(
                 message: '${country.currencies?.date?.values.first['name'].toString()}',
                 child: Row(
                   children: [
-                    Text('${country.currencies?.date?.values.first['symbol'].toString()}'),
+                    Text('${country.currencies?.date?.values.first['symbol'].toString()}'
+                      ,style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 20
+                      ),
+                    ),
                     const SizedBox(width: 4),
                     Text('${country.currencies?.date?.keys.first.toString()}'),
+                    const Spacer(),
+                    Text('(${country.currencies?.date?.values.first['name'].toString()})'
+                      ,style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 8
+                      ),
+                    ),
                   ],
                 ),
               ),
+
             ],
           ),
           // trailing: IconButton(

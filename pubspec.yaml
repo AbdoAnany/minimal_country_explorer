@@ -47,6 +47,7 @@ dependencies:
   fluttertoast: ^8.0.0 # For toast messages
   cached_network_image: ^3.0.0 # For caching network images
   skeletonizer: ^1.4.3
+  intl: ^0.20.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
