@@ -57,13 +57,15 @@ class CountryDetailScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Official ${ country.name?.official ?? 'Unknown Country'} '
+                 Text('Official'
                  ,
-                  style: AppStyle.textBlack18Bold,
-                ), Text('Official ${ country.name?.official ?? 'Unknown Country'} '
+                  style: AppStyle.textBlack16,
+                ),   Text('${ country.name?.official ?? 'Unknown Country'} '
                  ,
                   style: AppStyle.textBlack18Bold,
                 ),
+                const SizedBox(height: 8),
+
                 if (country.capital != null)
                   Text('Capital: ${country.capital?.join(', ')}'),
                 Row(
@@ -73,6 +75,7 @@ class CountryDetailScreen extends ConsumerWidget {
                     Text(AppFunction.formatNumber(country.population)),
                   ],
                 ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(
