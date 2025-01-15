@@ -40,7 +40,7 @@ class CountryCard extends StatelessWidget {
             ),
           ),
           title:  Hero(
-            tag:   country.name!.common!.toString(),
+            tag:   "${country.name?.common?.toString()}",
             child: Text(
               country.name?.common ?? 'Unknown Country',
               style: AppStyle.textBlack18Bold,
@@ -61,7 +61,7 @@ class CountryCard extends StatelessWidget {
                   Text(AppFunction.formatNumber(country.population)),
                 ],
               ),
-              if(country.currencies!.date!.isNotEmpty)
+              if(country.currencies!=null&& country.currencies!.date!.isNotEmpty)
               Row(
                 children: [
                   Text(

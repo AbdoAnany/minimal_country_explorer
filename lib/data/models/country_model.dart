@@ -13,6 +13,22 @@ class Languages {
     return lang ?? {};
   }
 }
+
+
+class NativeName {
+  Map<String, dynamic>? date;
+
+  NativeName({this.date});
+
+  NativeName.fromJson(Map<String, dynamic> json) {
+
+    date = Map<String, dynamic>.from(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return date ?? {};
+  }
+}
 class Currencies {
   Map<String, dynamic>? date;
 
@@ -131,42 +147,8 @@ class Name {
   }
 }
 
-class NativeName {
-  Eng? eng;
 
-  NativeName({this.eng});
 
-  NativeName.fromJson(Map<String, dynamic> json) {
-    eng = json['eng'] != null ? new Eng.fromJson(json['eng']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.eng != null) {
-      data['eng'] = this.eng!.toJson();
-    }
-    return data;
-  }
-}
-
-class Eng {
-  String? official;
-  String? common;
-
-  Eng({this.official, this.common});
-
-  Eng.fromJson(Map<String, dynamic> json) {
-    official = json['official'];
-    common = json['common'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['official'] = this.official;
-    data['common'] = this.common;
-    return data;
-  }
-}
 
 
 

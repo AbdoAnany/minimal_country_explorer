@@ -20,7 +20,8 @@ class FavoritesNotifier extends StateNotifier<List<CountryModel>> {
   }
 
   Future<void> removeFavorite(CountryModel country) async {
-    await _dbHelper.deleteFavorite(country.name!.common!);
+  final c=  await _dbHelper.deleteFavorite(country.name!.common!);
+  print('cccc ${c}');
     await _loadFavorites();
   }
 }

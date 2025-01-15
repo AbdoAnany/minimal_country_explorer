@@ -11,26 +11,21 @@ class ShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
-  enabled: true,
+      enabled: true,
       child: ListView.builder(
         itemCount: 10,
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemBuilder: (context, index) => CountryCard(country: CountryModel(
-          name: Name(
-            common: 'Egypt',
-            official: 'Egypt Egypt',
-            nativeName: NativeName(
-              eng:Eng(common: 'EgyptEgypt', official: 'EgyptEgypt'),
-            ),
-
-
-          )
-              ,capital: ['Egypt'],
-          flags: Flags(
-            png: 'https://flagcdn.com/w320/gs.png'
-          )
-        ),
-
+        itemBuilder: (context, index) => CountryCard(
+          country: CountryModel(
+              name: Name(
+                common: 'Egypt',
+                official: 'Egypt Egypt',
+                nativeName: NativeName(
+                  date: {"common": 'EgyptEgypt', "official": 'EgyptEgypt'},
+                ),
+              ),
+              capital: ['Egypt'],
+              flags: Flags(png: 'https://flagcdn.com/w320/gs.png')),
         ),
       ),
     );

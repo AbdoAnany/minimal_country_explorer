@@ -21,7 +21,7 @@ class DatabaseHelper {
   Future<Database> _initDB(String fileName) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, fileName);
- // await   clearFavorites();
+  // await   clearFavorites();
     return await openDatabase(
       path,
       version: 1,
@@ -46,7 +46,7 @@ class DatabaseHelper {
     final db = await instance.database;
 
     final row = {
-      'name': country.name?.official ?? '',
+      'name': json.encode(country.name?.toJson() ?? {}) ,
       'capital': country.capital?.join(', ') ?? '',
       'population': country.population ?? 0,
       'flag': country.flags?.png ?? '',
@@ -68,40 +68,25 @@ class DatabaseHelper {
       return -1;
     }
   }
-
+  Map<String, dynamic> _handelMap(type){
+    try {
+      if (type != null &&type.toString().isNotEmpty) {
+        return  json.decode(type);
+      }
+    } catch (e) {
+      print('Error decoding $type: $e');
+      return  {};
+    }
+    return  {};
+  }
   Future<List<CountryModel>> getFavorites() async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('favorites');
 
     return maps.map((map) {
-      Map<String, dynamic> languagesMap = {};
-      Map<String, dynamic> currenciesMap = {};
-
-      try {
-        if (map['languages'] != null && map['languages'].toString().isNotEmpty) {
-          languagesMap = json.decode(map['languages']);
-        }
-      } catch (e) {
-        print('Error decoding languages: $e');
-        languagesMap = {};
-      }
-
-      try {
-        if (map['currencies'] != null && map['currencies'].toString().isNotEmpty) {
-          currenciesMap = json.decode(map['currencies']);
-        }
-      } catch (e) {
-        print('Error decoding currencies: $e');
-        // If decoding fails, use empty map
-        currenciesMap = {};
-      }
-
 
       return CountryModel(
-        name: Name(
-          common: map['name'],
-          official: map['name'],
-        ),
+        name: Name.fromJson(_handelMap(map['name'])),
         flags: Flags(
           png: map['flag'],
           svg: map['flag']
@@ -110,53 +95,16 @@ class DatabaseHelper {
         ),
         capital: map['capital']?.toString().split(', '),
         population: map['population'] as int?,
-        currencies:Currencies.fromJson(currenciesMap),
-        languages: Languages.fromJson(languagesMap),
+        currencies:Currencies.fromJson(_handelMap(map['currencies'])),
+        languages: Languages.fromJson(_handelMap(map['languages'])),
         isFavorite: map['is_favorite'] == 1,
       );
     }).toList();
   }
 
-  // Delete a single favorite by name
-  Future<int> deleteFavorite(String name) async {
-    try {
-      final db = await instance.database;
-      return await db.delete(
-        'favorites',
-        where: 'name = ?',
-        whereArgs: [name],
-      );
-    } catch (e) {
-      print('Error deleting favorite: $e');
-      return -1;
-    }
-  }
 
-  // Delete a favorite using CountryModel
-  Future<int> deleteFavoriteCountry(CountryModel country) async {
-    try {
-      return await deleteFavorite(country.name?.official ?? '');
-    } catch (e) {
-      print('Error deleting favorite country: $e');
-      return -1;
-    }
-  }
 
-  // Check if a country is favorite
-  Future<bool> isFavorite(String name) async {
-    try {
-      final db = await instance.database;
-      final List<Map<String, dynamic>> result = await db.query(
-        'favorites',
-        where: 'name = ?',
-        whereArgs: [name],
-      );
-      return result.isNotEmpty;
-    } catch (e) {
-      print('Error checking favorite status: $e');
-      return false;
-    }
-  }
+
 
   // Clear all favorites
   Future<int> clearFavorites() async {
@@ -170,17 +118,53 @@ class DatabaseHelper {
   }
 
   // Toggle favorite status
+  Future<int> deleteFavorite(String name) async {
+    try {
+      final db = await instance.database;
+
+      // Create a Name object and encode it the same way as insert
+      final nameObj = Name(official: name, common: name);
+      final encodedName = json.encode({'official': name, 'common': name});
+
+      return await db.delete(
+        'favorites',
+        where: 'name = ?',
+        whereArgs: [encodedName],
+      );
+    } catch (e) {
+      print('Error deleting favorite: $e');
+      return -1;
+    }
+  }
+
+  Future<bool> isFavorite(String name) async {
+    try {
+      final db = await instance.database;
+      final encodedName = json.encode({'official': name, 'common': name});
+
+      final List<Map<String, dynamic>> result = await db.query(
+        'favorites',
+        where: 'name = ?',
+        whereArgs: [encodedName],
+      );
+      return result.isNotEmpty;
+    } catch (e) {
+      print('Error checking favorite status: $e');
+      return false;
+    }
+  }
+
   Future<bool> toggleFavorite(CountryModel country) async {
     try {
       final name = country.name?.official ?? '';
       final isFav = await isFavorite(name);
 
       if (isFav) {
-        await deleteFavorite(name);
-        return false;
+        final result = await deleteFavorite(name);
+        return result > 0;
       } else {
-        await insertFavorite(country);
-        return true;
+        final result = await insertFavorite(country);
+        return result > 0;
       }
     } catch (e) {
       print('Error toggling favorite: $e');
