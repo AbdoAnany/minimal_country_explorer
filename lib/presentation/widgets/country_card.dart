@@ -29,23 +29,31 @@ class CountryCard extends StatelessWidget {
         child: ListTile(
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              country.flags?.png ?? '',
-              width: 100,
-              height: 75,
-              fit: BoxFit.cover,
+            child:  Hero(
+              tag:   country.flags!.png.toString(),
+              child: Image.network(
+                country.flags?.png ?? '',
+                width: 100,
+                height: 75,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          title: Text(
-            country.name?.common ?? 'Unknown Country',
-            style: AppStyle.textBlack18Bold,
+          title:  Hero(
+            tag:   country.name!.common!.toString(),
+            child: Text(
+              country.name?.common ?? 'Unknown Country',
+              style: AppStyle.textBlack18Bold,
 
+            ),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (country.capital != null)
-                Text('Capital: ${country.capital?.join(', ')}'),
+                Hero(
+                    tag: '${country.capital?.join(', ')}',
+                    child: Material(child: Text('Capital: ${country.capital?.join(', ')}'))),
               Row(
                 children: [
                   const Icon(Icons.group, size: 16),
@@ -53,6 +61,7 @@ class CountryCard extends StatelessWidget {
                   Text(AppFunction.formatNumber(country.population)),
                 ],
               ),
+              if(country.currencies!.date!.isNotEmpty)
               Row(
                 children: [
                   Text(
@@ -64,7 +73,7 @@ class CountryCard extends StatelessWidget {
                   const Spacer(),
                   Text(
                     '(${country.currencies?.date?.values.first['name'].toString()})',
-                    style: AppStyle.textGray8,
+                    style: AppStyle.textGray10,
                   ),
                 ],
               ),

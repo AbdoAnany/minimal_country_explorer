@@ -1,5 +1,33 @@
 // lib/data/models/country_model.dart
 
+class Languages {
+  Map<String, String>? lang;
+
+  Languages({this.lang});
+
+  Languages.fromJson(Map<String, dynamic> json) {
+    lang = Map<String, String>.from(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return lang ?? {};
+  }
+}
+class Currencies {
+  Map<String, dynamic>? date;
+
+  Currencies({this.date});
+
+  Currencies.fromJson(Map<String, dynamic> json) {
+
+    date = Map<String, dynamic>.from(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return date ?? {};
+  }
+}
+
 class CountryModel {
   Flags? flags;
   Name? name;
@@ -9,67 +37,52 @@ class CountryModel {
   int? population;
   late bool isFavorite;
 
-  CountryModel(
-      {this.flags,
-        this.name,
-        this.currencies,
-        this.capital,
-        this.isFavorite=false,
-        this.languages,
-        this.population});
+  CountryModel({
+    this.flags,
+    this.name,
+    this.currencies,
+    this.capital,
+    this.isFavorite = false,
+    this.languages,
+    this.population,
+  });
 
   CountryModel.fromJson(Map<String, dynamic> json) {
-    flags = json['flags'] != null ? new Flags.fromJson(json['flags']) : null;
-    name = json['name'] != null ? new Name.fromJson(json['name']) : null;
+
+
+
+    flags = json['flags'] != null ? Flags.fromJson(json['flags']) : null;
+    name = json['name'] != null ? Name.fromJson(json['name']) : null;
     currencies = json['currencies'] != null
-        ? new Currencies.fromJson(json['currencies'])
+        ? Currencies.fromJson(json['currencies'])
         : null;
-    capital = json['capital'].cast<String>();
+    capital = json['capital']?.cast<String>();
     languages = json['languages'] != null
-        ? new Languages.fromJson(json['languages'])
+        ? Languages.fromJson(json['languages'])
         : null;
     population = json['population'];
-    isFavorite = json['isFavorite']??false;
+    isFavorite = json['isFavorite'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.flags != null) {
-      data['flags'] = this.flags!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (flags != null) {
+      data['flags'] = flags!.toJson();
     }
-    if (this.name != null) {
-      data['name'] = this.name!.official;
+    if (name != null) {
+      data['name'] = name!.toJson();
     }
-    // if (this.currencies != null) {
-    //   data['currencies'] = this.currencies!.toJson();
-    // }
-    data['capital'] = this.capital;
-    if (this.languages != null) {
-      data['languages'] = this.languages!.toJson();
+    if (languages != null) {
+      data['languages'] = languages!.toJson();
+    } if (currencies != null) {
+      data['currencies'] = currencies!.toJson();
     }
-    data['population'] = this.population;
+    data['capital'] = capital;
+    data['population'] = population;
+    data['isFavorite'] = isFavorite;
     return data;
   }
-  CountryModel copyWith({
-    Flags? flags,
-    Name? name,
-    Currencies? currencies,
-    List<String>? capital,
-    Languages? languages,
-    int? population,
-    bool? isFavorite,
-  }) {
-    return CountryModel(
-      flags: flags ?? this.flags,
-      name: name ?? this.name,
-      currencies: currencies ?? this.currencies,
-      capital: capital ?? this.capital,
-      languages: languages ?? this.languages,
-      population: population ?? this.population,
-      isFavorite: isFavorite ?? this.isFavorite,
-    );
-  }}
-
+}
 class Flags {
   String? png;
   String? svg;
@@ -155,168 +168,8 @@ class Eng {
   }
 }
 
-class Currencies {
-  Map<String, dynamic>? date;
-
-  Currencies({this.date});
-
-  Currencies.fromJson(Map<String, dynamic> json) {
-    date=json;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['date'] =this.date;
-    return data;
-  }
-}
-
-class SHP {
-  String? name;
-  String? symbol;
-
-  SHP({this.name, this.symbol});
-
-  SHP.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    symbol = json['symbol'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['symbol'] = this.symbol;
-    return data;
-  }
-}
-
-class Languages {
-  String? eng;
-
-  Languages({this.eng});
-
-  Languages.fromJson(Map<String, dynamic> json) {
-    eng = json['eng'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['eng'] = this.eng;
-    return data;
-  }
-}
 
 
 
-class Country1 {
-  final String name;
-  final String capital;
-  final int population;
-  final String currency;
-  final String languages;
-  final String flag;
 
-  Country1({
-    required this.name,
-    required this.capital,
-    required this.population,
-    required this.currency,
-    required this.languages,
-    required this.flag,
-  });
 
-  factory Country1.fromJson(Map<String, dynamic> json) {
-    final currencies = json['currencies']?.values.first['name'] ?? 'Unknown';
-    final languages = (json['languages'] as Map<String, dynamic>?)?.values.join(', ') ?? 'Unknown';
-
-    return Country1(
-      name: json['name']['common'],
-      capital: (json['capital'] ?? ['Unknown'])[0],
-      population: json['population'],
-      currency: currencies,
-      languages: languages,
-      flag: json['flags']['png'],
-    );
-  }
-
-  // Convert to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'capital': capital,
-      'population': population,
-      'currency': currency,
-      'languages': languages,
-      'flag': flag,
-    };
-  }
-
-  // Override == operator
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Country1 &&
-        other.name == name &&
-        other.capital == capital &&
-        other.population == population &&
-        other.currency == currency &&
-        other.languages == languages &&
-        other.flag == flag;
-  }
-
-  // Override hashCode
-  @override
-  int get hashCode {
-    return name.hashCode ^
-    capital.hashCode ^
-    population.hashCode ^
-    currency.hashCode ^
-    languages.hashCode ^
-    flag.hashCode;
-  }
-}
-
-// class CountryModel {
-//   final String name;
-//   final String capital;
-//   final String flag;
-//   final int population;
-//   final Map<String, dynamic> currencies;
-//   final Map<String, dynamic> languages;
-//
-//   CountryModel({
-//     required this.name,
-//     required this.capital,
-//     required this.flag,
-//     required this.population,
-//     required this.currencies,
-//     required this.languages,
-//   });
-//
-//   // Convert JSON to CountryModel
-//   factory CountryModel.fromJson(Map<String, dynamic> json) {
-// print(json);
-// print(json['languages']);
-//     return CountryModel(
-//       name: json['name']['common'],
-//       capital: json['capital']?.first ?? 'N/A',
-//       flag: json['flags']['png'],
-//       population: json['population'],
-//       currencies: json['currencies'] ?? {},
-//       languages: json['languages'] ?? {},
-//     );
-//   }
-//
-//   // Convert CountryModel to JSON
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'name': name,
-//       'capital': capital,
-//       'flag': flag,
-//       'population': population,
-//       'currencies': currencies,
-//       'languages': languages,
-//     };
-//   }
-// }
