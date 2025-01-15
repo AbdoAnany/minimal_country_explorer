@@ -3,9 +3,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/country_model.dart';
 
-
-
-
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
@@ -21,7 +18,7 @@ class DatabaseHelper {
   Future<Database> _initDB(String fileName) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, fileName);
-  // await   clearFavorites();
+    // await   clearFavorites();
     return await openDatabase(
       path,
       version: 1,
@@ -46,7 +43,7 @@ class DatabaseHelper {
     final db = await instance.database;
 
     final row = {
-      'name': json.encode(country.name?.toJson() ?? {}) ,
+      'name': json.encode(country.name?.toJson() ?? {}),
       'capital': country.capital?.join(', ') ?? '',
       'population': country.population ?? 0,
       'flag': country.flags?.png ?? '',
@@ -68,43 +65,39 @@ class DatabaseHelper {
       return -1;
     }
   }
-  Map<String, dynamic> _handelMap(type){
+
+  Map<String, dynamic> _handelMap(type) {
     try {
-      if (type != null &&type.toString().isNotEmpty) {
-        return  json.decode(type);
+      if (type != null && type.toString().isNotEmpty) {
+        return json.decode(type);
       }
     } catch (e) {
       print('Error decoding $type: $e');
-      return  {};
+      return {};
     }
-    return  {};
+    return {};
   }
+
   Future<List<CountryModel>> getFavorites() async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query('favorites');
 
     return maps.map((map) {
-
+      print(map);
       return CountryModel(
         name: Name.fromJson(_handelMap(map['name'])),
         flags: Flags(
           png: map['flag'],
-          svg: map['flag']
-              ?.replaceAll('w320', '')
-              ?.replaceAll('png', 'svg'),
+          svg: map['flag']?.replaceAll('w320', '')?.replaceAll('png', 'svg'),
         ),
         capital: map['capital']?.toString().split(', '),
         population: map['population'] as int?,
-        currencies:Currencies.fromJson(_handelMap(map['currencies'])),
+        currencies: Currencies.fromJson(_handelMap(map['currencies'])),
         languages: Languages.fromJson(_handelMap(map['languages'])),
         isFavorite: map['is_favorite'] == 1,
       );
     }).toList();
   }
-
-
-
-
 
   // Clear all favorites
   Future<int> clearFavorites() async {
@@ -118,14 +111,13 @@ class DatabaseHelper {
   }
 
   // Toggle favorite status
-  Future<int> deleteFavorite(String name) async {
+  Future<int> deleteFavorite(CountryModel country) async {
     try {
       final db = await instance.database;
 
       // Create a Name object and encode it the same way as insert
-      final nameObj = Name(official: name, common: name);
-      final encodedName = json.encode({'official': name, 'common': name});
-
+      final encodedName = json.encode({'official': country.name?.official, 'common': country.name?.common});
+      // country.flags.png
       return await db.delete(
         'favorites',
         where: 'name = ?',
@@ -160,7 +152,7 @@ class DatabaseHelper {
       final isFav = await isFavorite(name);
 
       if (isFav) {
-        final result = await deleteFavorite(name);
+        final result = await deleteFavorite(country);
         return result > 0;
       } else {
         final result = await insertFavorite(country);
