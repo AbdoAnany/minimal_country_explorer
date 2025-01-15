@@ -10,7 +10,9 @@ class CountryApiService {
       final response = await _dio.get(
         'https://restcountries.com/v3.1/all?fields=name,capital,flags,population,currencies,languages',
       );
-      return (response.data as List).map((json) => CountryModel.fromJson(json)).toList();
+      return (response.data as List)
+          .map((json) => CountryModel.fromJson(json))
+          .toList();
     } catch (e) {
       throw Exception('Failed to load countries: $e');
     }
