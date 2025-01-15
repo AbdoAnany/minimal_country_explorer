@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const CountryListScreen(),
       routes: {
-        '/favorites': (context) => FavoritesScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
       },
     );
   }

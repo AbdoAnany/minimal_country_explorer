@@ -15,7 +15,8 @@ class CountryDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritesNotifier = ref.read(favoritesNotifierProvider.notifier);
-    final isFavorite = ref.watch(favoritesNotifierProvider).contains(country);
+    final isFavorite = ref.watch(favoritesNotifierProvider)
+        .any((c) => c.name?.official == country.name?.official);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,17 +27,21 @@ class CountryDetailScreen extends ConsumerWidget {
               isFavorite ? Iconsax.heart5 : Iconsax.heart,
               color: isFavorite ? Colors.red : Colors.grey,
             ),
-            onPressed: () {
+            onPressed: () async {
               if (isFavorite) {
-                favoritesNotifier.removeFavorite(country);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Removed from favorites')),
-                );
+                await favoritesNotifier.removeFavorite(country);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Removed from favorites')),
+                  );
+                }
               } else {
-                favoritesNotifier.addFavorite(country);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Added to favorites')),
-                );
+                await favoritesNotifier.addFavorite(country);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Added to favorites')),
+                  );
+                }
               }
             },
           ),

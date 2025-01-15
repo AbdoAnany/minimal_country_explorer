@@ -1,5 +1,3 @@
-// lib/data/models/country_model.dart
-
 class Languages {
   Map<String, String>? lang;
 
@@ -12,8 +10,13 @@ class Languages {
   Map<String, dynamic> toJson() {
     return lang ?? {};
   }
-}
 
+  Languages copyWith({Map<String, String>? lang}) {
+    return Languages(
+      lang: lang ?? this.lang,
+    );
+  }
+}
 
 class NativeName {
   Map<String, dynamic>? date;
@@ -21,30 +24,42 @@ class NativeName {
   NativeName({this.date});
 
   NativeName.fromJson(Map<String, dynamic> json) {
-
     date = Map<String, dynamic>.from(json);
   }
 
   Map<String, dynamic> toJson() {
     return date ?? {};
   }
+
+  NativeName copyWith({Map<String, dynamic>? date}) {
+    return NativeName(
+      date: date ?? this.date,
+    );
+  }
 }
+
 class Currencies {
   Map<String, dynamic>? date;
 
   Currencies({this.date});
 
   Currencies.fromJson(Map<String, dynamic> json) {
-
     date = Map<String, dynamic>.from(json);
   }
 
   Map<String, dynamic> toJson() {
     return date ?? {};
   }
+
+  Currencies copyWith({Map<String, dynamic>? date}) {
+    return Currencies(
+      date: date ?? this.date,
+    );
+  }
 }
 
 class CountryModel {
+  // int? id;
   Flags? flags;
   Name? name;
   Currencies? currencies;
@@ -55,6 +70,7 @@ class CountryModel {
 
   CountryModel({
     this.flags,
+    // this.id,
     this.name,
     this.currencies,
     this.capital,
@@ -64,9 +80,6 @@ class CountryModel {
   });
 
   CountryModel.fromJson(Map<String, dynamic> json) {
-
-
-
     flags = json['flags'] != null ? Flags.fromJson(json['flags']) : null;
     name = json['name'] != null ? Name.fromJson(json['name']) : null;
     currencies = json['currencies'] != null
@@ -77,6 +90,7 @@ class CountryModel {
         ? Languages.fromJson(json['languages'])
         : null;
     population = json['population'];
+    // id = json['id'];
     isFavorite = json['isFavorite'] ?? false;
   }
 
@@ -90,15 +104,40 @@ class CountryModel {
     }
     if (languages != null) {
       data['languages'] = languages!.toJson();
-    } if (currencies != null) {
+    }
+    if (currencies != null) {
       data['currencies'] = currencies!.toJson();
     }
     data['capital'] = capital;
     data['population'] = population;
+    // data['id'] = id;
     data['isFavorite'] = isFavorite;
     return data;
   }
+
+  CountryModel copyWith({
+    int? id,
+    Flags? flags,
+    Name? name,
+    Currencies? currencies,
+    List<String>? capital,
+    Languages? languages,
+    int? population,
+    bool? isFavorite,
+  }) {
+    return CountryModel(
+      // id: id ?? this.id,
+      flags: flags ?? this.flags,
+      name: name ?? this.name,
+      currencies: currencies ?? this.currencies,
+      capital: capital ?? this.capital,
+      languages: languages ?? this.languages,
+      population: population ?? this.population,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }
+
 class Flags {
   String? png;
   String? svg;
@@ -113,11 +152,19 @@ class Flags {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['png'] = this.png;
-    data['svg'] = this.svg;
-    data['alt'] = this.alt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['png'] = png;
+    data['svg'] = svg;
+    data['alt'] = alt;
     return data;
+  }
+
+  Flags copyWith({String? png, String? svg, String? alt}) {
+    return Flags(
+      png: png ?? this.png,
+      svg: svg ?? this.svg,
+      alt: alt ?? this.alt,
+    );
   }
 }
 
@@ -132,26 +179,25 @@ class Name {
     common = json['common'];
     official = json['official'];
     nativeName = json['nativeName'] != null
-        ? new NativeName.fromJson(json['nativeName'])
+        ? NativeName.fromJson(json['nativeName'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['common'] = this.common;
-    data['official'] = this.official;
-    if (this.nativeName != null) {
-      data['nativeName'] = this.nativeName!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['common'] = common;
+    data['official'] = official;
+    if (nativeName != null) {
+      data['nativeName'] = nativeName!.toJson();
     }
     return data;
   }
+
+  Name copyWith({String? common, String? official, NativeName? nativeName}) {
+    return Name(
+      common: common ?? this.common,
+      official: official ?? this.official,
+      nativeName: nativeName ?? this.nativeName,
+    );
+  }
 }
-
-
-
-
-
-
-
-
-

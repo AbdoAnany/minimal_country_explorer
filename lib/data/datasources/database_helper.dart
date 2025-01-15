@@ -83,8 +83,9 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> maps = await db.query('favorites');
 
     return maps.map((map) {
-      print(map);
+
       return CountryModel(
+        // id: map['id'],
         name: Name.fromJson(_handelMap(map['name'])),
         flags: Flags(
           png: map['flag'],
@@ -116,8 +117,8 @@ class DatabaseHelper {
       final db = await instance.database;
 
       // Create a Name object and encode it the same way as insert
-      final encodedName = json.encode({'official': country.name?.official, 'common': country.name?.common});
-      // country.flags.png
+      final encodedName = json.encode(country.name);
+
       return await db.delete(
         'favorites',
         where: 'name = ?',
@@ -129,10 +130,10 @@ class DatabaseHelper {
     }
   }
 
-  Future<bool> isFavorite(String name) async {
+  Future<bool> isFavorite(CountryModel country) async {
     try {
-      final db = await instance.database;
-      final encodedName = json.encode({'official': name, 'common': name});
+    final db = await instance.database;
+      final encodedName = json.encode(country.name);
 
       final List<Map<String, dynamic>> result = await db.query(
         'favorites',
@@ -149,7 +150,7 @@ class DatabaseHelper {
   Future<bool> toggleFavorite(CountryModel country) async {
     try {
       final name = country.name?.official ?? '';
-      final isFav = await isFavorite(name);
+      final isFav = await isFavorite(country);
 
       if (isFav) {
         final result = await deleteFavorite(country);

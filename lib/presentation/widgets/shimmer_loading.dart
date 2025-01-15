@@ -17,6 +17,7 @@ class ShimmerLoading extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         itemBuilder: (context, index) => CountryCard(
           country: CountryModel(
+            // id: 0,
               name: Name(
                 common: 'Egypt',
                 official: 'Egypt Egypt',
