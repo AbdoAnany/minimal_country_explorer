@@ -3,7 +3,6 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:minimal_country_explorer/presentation/screens/country_detail_screen.dart';
 import 'package:minimal_country_explorer/presentation/widgets/country_card.dart';
 
 import '../providers/country_provider.dart';
@@ -47,7 +46,7 @@ class CountryListScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body:    filteredCountriesAsync.when(
+      body: filteredCountriesAsync.when(
         data: (countries) => ListView.builder(
           itemCount: countries.length,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),

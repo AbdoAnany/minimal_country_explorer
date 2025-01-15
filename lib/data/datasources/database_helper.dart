@@ -1,6 +1,8 @@
 import 'dart:convert';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
 import '../models/country_model.dart';
 
 class DatabaseHelper {
@@ -83,7 +85,6 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> maps = await db.query('favorites');
 
     return maps.map((map) {
-
       return CountryModel(
         // id: map['id'],
         name: Name.fromJson(_handelMap(map['name'])),
@@ -132,7 +133,7 @@ class DatabaseHelper {
 
   Future<bool> isFavorite(CountryModel country) async {
     try {
-    final db = await instance.database;
+      final db = await instance.database;
       final encodedName = json.encode(country.name);
 
       final List<Map<String, dynamic>> result = await db.query(

@@ -17,13 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Minimal Country Explorer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue,
-
-      scaffoldBackgroundColor: AppColor.colorBg,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColor.colorBg,
-        )
-      ),
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: AppColor.colorBg,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppColor.colorBg,
+          )),
       home: const CountryListScreen(),
       routes: {
         '/favorites': (context) => const FavoritesScreen(),

@@ -5,8 +5,10 @@ import 'package:minimal_country_explorer/data/models/country_model.dart';
 
 import 'favorites_notifier.dart';
 
-final apiServiceProvider = Provider<CountryApiService>((ref) => CountryApiService());
-final databaseHelperProvider = Provider<DatabaseHelper>((ref) => DatabaseHelper.instance);
+final apiServiceProvider =
+    Provider<CountryApiService>((ref) => CountryApiService());
+final databaseHelperProvider =
+    Provider<DatabaseHelper>((ref) => DatabaseHelper.instance);
 
 // Provider to get favorite countries from database
 final favoriteIdsProvider = FutureProvider<List<String>>((ref) async {
@@ -25,37 +27,39 @@ final countriesProvider = FutureProvider<List<CountryModel>>((ref) async {
     data: (favoriteIds) async {
       final countries = await apiService.fetchCountries();
       return countries.map((country) {
-        final isFavorite = favorites.any((fav) =>
-        fav.name?.official == country.name?.official);
+        final isFavorite = favorites
+            .any((fav) => fav.name?.official == country.name?.official);
         return country.copyWith(isFavorite: isFavorite);
       }).toList();
     },
     loading: () async {
       final countries = await apiService.fetchCountries();
       return countries.map((country) {
-        final isFavorite = favorites.any((fav) =>
-        fav.name?.official == country.name?.official);
+        final isFavorite = favorites
+            .any((fav) => fav.name?.official == country.name?.official);
         return country.copyWith(isFavorite: isFavorite);
       }).toList();
     },
     error: (_, __) async {
       final countries = await apiService.fetchCountries();
       return countries.map((country) {
-        final isFavorite = favorites.any((fav) =>
-        fav.name?.official == country.name?.official);
+        final isFavorite = favorites
+            .any((fav) => fav.name?.official == country.name?.official);
         return country.copyWith(isFavorite: isFavorite);
       }).toList();
     },
   );
 });
 
-final favoritesNotifierProvider = StateNotifierProvider<FavoritesNotifier, List<CountryModel>>((ref) {
+final favoritesNotifierProvider =
+    StateNotifierProvider<FavoritesNotifier, List<CountryModel>>((ref) {
   final dbHelper = ref.read(databaseHelperProvider);
   return FavoritesNotifier(dbHelper);
 });
 
 // Modified filtered countries provider
-final filteredCountriesProvider = FutureProvider<List<CountryModel>>((ref) async {
+final filteredCountriesProvider =
+    FutureProvider<List<CountryModel>>((ref) async {
   final countriesAsync = ref.watch(countriesProvider);
   final searchQuery = ref.watch(searchQueryProvider);
 
@@ -65,7 +69,10 @@ final filteredCountriesProvider = FutureProvider<List<CountryModel>>((ref) async
 
       return countries
           .where((country) =>
-      country.name?.common?.toLowerCase().contains(searchQuery.toLowerCase()) ?? false)
+              country.name?.common
+                  ?.toLowerCase()
+                  .contains(searchQuery.toLowerCase()) ??
+              false)
           .toList();
     },
     loading: () => [],
@@ -76,7 +83,8 @@ final filteredCountriesProvider = FutureProvider<List<CountryModel>>((ref) async
 final searchQueryProvider = StateProvider<String>((ref) => '');
 
 // Updated toggle favorite provider
-final toggleFavoriteProvider = Provider.family<Future<void>, CountryModel>((ref, country) async {
+final toggleFavoriteProvider =
+    Provider.family<Future<void>, CountryModel>((ref, country) async {
   final notifier = ref.read(favoritesNotifierProvider.notifier);
   final dbHelper = ref.read(databaseHelperProvider);
 

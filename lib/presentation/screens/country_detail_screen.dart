@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:minimal_country_explorer/core/const/app_color.dart';
+
 import '../../core/const/app_style.dart';
 import '../../core/helper/app_helper_function.dart';
-import '../providers/country_provider.dart';
 import '../../data/models/country_model.dart';
+import '../providers/country_provider.dart';
 
 class CountryDetailScreen extends ConsumerWidget {
   final CountryModel country;
@@ -15,7 +16,8 @@ class CountryDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritesNotifier = ref.read(favoritesNotifierProvider.notifier);
-    final isFavorite = ref.watch(favoritesNotifierProvider)
+    final isFavorite = ref
+        .watch(favoritesNotifierProvider)
         .any((c) => c.name?.official == country.name?.official);
 
     return Scaffold(

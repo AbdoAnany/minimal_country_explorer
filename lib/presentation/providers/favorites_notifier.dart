@@ -2,11 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:minimal_country_explorer/data/datasources/database_helper.dart';
 import 'package:minimal_country_explorer/data/models/country_model.dart';
 
-
 class CheckFavoritesNotifier extends StateNotifier<bool> {
   final DatabaseHelper _dbHelper;
   final CountryModel country;
-  CheckFavoritesNotifier(this._dbHelper,this.country) : super(false) {
+  CheckFavoritesNotifier(this._dbHelper, this.country) : super(false) {
     _checkIsFavorites(country);
   }
 
@@ -15,7 +14,6 @@ class CheckFavoritesNotifier extends StateNotifier<bool> {
     state = favorites;
   }
 }
-
 
 class FavoritesNotifier extends StateNotifier<List<CountryModel>> {
   final DatabaseHelper _dbHelper;
@@ -29,8 +27,6 @@ class FavoritesNotifier extends StateNotifier<List<CountryModel>> {
     state = favorites;
   }
 
-
-
   Future<void> addFavorite(CountryModel country) async {
     await _dbHelper.insertFavorite(country);
     await _loadFavorites();
@@ -40,13 +36,15 @@ class FavoritesNotifier extends StateNotifier<List<CountryModel>> {
     await _dbHelper.deleteFavorite(country);
     await _loadFavorites();
   }
+
   void toggleFavorite(CountryModel country) {
-    final isFavorite = state.any((element) =>
-    element.name!.common == country.name!.common);
+    final isFavorite =
+        state.any((element) => element.name!.common == country.name!.common);
 
     if (isFavorite) {
-      state = state.where((element) =>
-      element.name!.common != country.name!.common).toList();
+      state = state
+          .where((element) => element.name!.common != country.name!.common)
+          .toList();
     } else {
       state = [...state, country.copyWith(isFavorite: true)];
     }
